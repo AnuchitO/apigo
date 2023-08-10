@@ -2,6 +2,7 @@ package main
 
 import (
 	"apigo/wallet"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -95,9 +96,19 @@ func main() {
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
 
+// Logger handler
+func Logger() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		log.Println("handler:", c.Request.Method, c.Request.URL)
+		c.Next()
+		log.Println("after call next handler:", c.Request.Method, c.Request.URL)
+	}
+}
+
 // new Server return Gin
 func newServer() *gin.Engine {
 	r := gin.Default()
+	r.Use(Logger())
 
 	r.POST("/wallets", wallet.CreateWalletHandler)
 	r.GET("/wallets/:id", wallet.GetWalletByIDHandler)
