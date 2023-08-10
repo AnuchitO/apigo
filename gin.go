@@ -105,12 +105,27 @@ func Logger() gin.HandlerFunc {
 	}
 }
 
+// wrapper gin.HandlerFunc to use custom logger
+// take gin.HandlerFunc as input and return gin.HandlerFunc
+func Log(next gin.HandlerFunc) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		log.Println("Auth:")
+		// if not pass auth
+		// c.Abort()
+		// c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		// return
+
+		next(c)
+		log.Println("xxxx call next handler:", c.Request.Method, c.Request.URL)
+	}
+}
+
 // new Server return Gin
 func newServer() *gin.Engine {
 	r := gin.Default()
 	r.Use(Logger())
 
-	r.POST("/wallets", wallet.CreateWalletHandler)
+	r.POST("/wallets", Log(wallet.CreateWalletHandler))
 	r.GET("/wallets/:id", wallet.GetWalletByIDHandler)
 	r.GET("/wallets/:id/balance", wallet.GetBalanceByIDHandler)
 	r.POST("/wallets/:id/deposit", wallet.DepositByIDHandler)

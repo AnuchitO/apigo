@@ -17,7 +17,7 @@ type Wallet struct {
 var wallets = make(map[string]Wallet)
 
 func CreateWalletHandler(c *gin.Context) {
-	log.Println("handler:", c.Request.Method, c.Request.URL)
+	log.Println("Create:")
 	var wt Wallet
 	if err := c.ShouldBindJSON(&wt); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -31,7 +31,6 @@ func CreateWalletHandler(c *gin.Context) {
 }
 
 func GetWalletByIDHandler(c *gin.Context) {
-	log.Println("handler:", c.Request.Method, c.Request.URL)
 	id := c.Param("id")
 	wt, ok := wallets[id]
 	if !ok {
@@ -44,7 +43,6 @@ func GetWalletByIDHandler(c *gin.Context) {
 }
 
 func GetBalanceByIDHandler(c *gin.Context) {
-	log.Println("handler:", c.Request.Method, c.Request.URL)
 	id := c.Param("id")
 	wt, ok := wallets[id]
 	if !ok {
@@ -60,7 +58,6 @@ func GetBalanceByIDHandler(c *gin.Context) {
 }
 
 func DepositByIDHandler(c *gin.Context) {
-	log.Println("handler:", c.Request.Method, c.Request.URL)
 	id := c.Param("id")
 	wt, ok := wallets[id]
 	if !ok {
@@ -90,7 +87,6 @@ func DepositByIDHandler(c *gin.Context) {
 }
 
 func WithdrawByIDHandler(c *gin.Context) {
-	log.Println("handler:", c.Request.Method, c.Request.URL)
 	id := c.Param("id")
 	wt, ok := wallets[id]
 	if !ok {
