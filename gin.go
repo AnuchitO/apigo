@@ -2,6 +2,8 @@ package main
 
 import "github.com/gin-gonic/gin"
 
+// GET http://localhost:8080/hello?name=nong
+
 func main() {
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
