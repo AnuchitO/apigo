@@ -1,6 +1,10 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 // GET http://localhost:8080/hello?name=nong
 // GET http://localhost:8080/hello/anuchito?name=nong
@@ -15,8 +19,11 @@ func main() {
 	})
 
 	r.GET("/hello/:id", func(c *gin.Context) {
-		id := c.Param("id")
+		c.Request.URL.Query().Get("name")
 		name := c.Query("name")
+		
+		id := c.Param("id")
+
 		c.JSON(200, gin.H{
 			"id":   id,
 			"name": name,
@@ -32,6 +39,17 @@ func main() {
 		}
 		```
 	*/
+
+	r.POST("/wallets", func(c *gin.Context) {
+		var wt Wallet
+		if err := c.ShouldBindJSON(&wt); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		c.JSON(http.StatusCreated, wt)
+	})
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
