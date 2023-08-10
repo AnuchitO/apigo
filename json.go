@@ -8,7 +8,7 @@ import "fmt"
 
 type wallet struct {
 	ID      string  `json:"id"`
-	Owner   string  `json:"account"`
+	Owner   string  `json:"owner"`
 	Balance float64 `json:"balance"`
 }
 
