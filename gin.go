@@ -11,7 +11,7 @@ import (
 POST /wallets
 ```json
 POST /wallets
-
+payload:
 	{
 	  "owner": "AnuchitO",
 	  "balance": 100.0
@@ -31,7 +31,7 @@ response:
 GET /wallets/:id
 ```json
 GET /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f
-
+payload: no payload
 response:
 
 	{
@@ -45,7 +45,7 @@ response:
 GET /wallets/:id/balance
 ```json
 GET /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/balance
-
+payload: no payload
 response:
 
 	{
@@ -58,7 +58,7 @@ response:
 POST /wallets/:id/deposit
 ```json
 POST /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/deposit
-
+payload:
 	{
 		"amount": 100.0
 	}
@@ -75,7 +75,7 @@ response:
 POST /wallets/:id/withdraw
 ```json
 POST /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/withdraw
-
+payload:
 	{
 		"amount": 100.0
 	}
