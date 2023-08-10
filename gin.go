@@ -8,10 +8,6 @@ import (
 
 /*
 POST /wallets
-GET /wallets/:id/balance
-POST /wallets/:id/deposit
-POST /wallets/:id/withdraw
-
 ```json
 POST /wallets
 
@@ -25,6 +21,68 @@ response:
 	{
 		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
 		"owner": "AnuchitO",
+		"balance": 100.0
+	}
+
+```
+
+
+GET /wallets/:id
+```json
+GET /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f
+
+response:
+
+	{
+		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"owner": "AnuchitO",
+		"balance": 100.0
+	}
+
+```
+
+GET /wallets/:id/balance
+```json
+GET /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/balance
+
+response:
+
+	{
+		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"balance": 100.0
+	}
+
+```
+
+POST /wallets/:id/deposit
+```json
+POST /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/deposit
+
+	{
+		"amount": 100.0
+	}
+
+response:
+
+	{
+		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"balance": 200.0
+	}
+
+```
+
+POST /wallets/:id/withdraw
+```json
+POST /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/withdraw
+
+	{
+		"amount": 100.0
+	}
+
+response:
+
+	{
+		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
 		"balance": 100.0
 	}
 
