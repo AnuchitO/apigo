@@ -6,14 +6,16 @@ import "fmt"
 {"id": "wallet_AnuchitO","owner": "AnuchitO","balance": 100.0}
 */
 
-type wallet struct {
+type Twallet struct {
 	ID      string  `json:"id"`
 	Owner   string  `json:"owner"`
 	Balance float64 `json:"balance"`
 }
 
 func main() {
-	var wt wallet
+	var wt type name interface {
+		
+	}wallet
 	fmt.Printf("%#v\n", wt)
 	fmt.Printf("type: %T\n", wt)
 	i := 45
