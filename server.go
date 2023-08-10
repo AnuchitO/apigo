@@ -6,8 +6,13 @@ import (
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("helloHandler")
-	w.Write([]byte("Hello, world!"))
+	log.Println("METHOD: ", r.Method)
+	if r.Method == "GET" {
+		w.Write([]byte("Hello, world!"))
+		return
+	}
+
+	w.WriteHeader(http.StatusMethodNotAllowed)
 }
 
 func main() {
