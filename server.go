@@ -17,7 +17,7 @@ POST /wallets
 {
   "id": "wallet_AnuchitO",
   "owner": "AnuchitO",
-  "balance": 100.0,
+  "balance": 100.0
 }
 ```
 */
