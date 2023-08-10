@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// TODO: Transactions
 /*
 POST /wallets
 ```json
