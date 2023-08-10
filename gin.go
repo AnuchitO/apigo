@@ -6,8 +6,34 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GET http://localhost:8080/hello?name=nong
-// GET http://localhost:8080/hello/anuchito?name=nong
+/*
+POST /wallets
+GET /wallets/:id/balance
+POST /wallets/:id/deposit
+POST /wallets/:id/withdraw
+
+```json
+POST /wallets
+
+	{
+	  "owner": "AnuchitO",
+	  "balance": 100.0
+	}
+
+response:
+
+	{
+		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"owner": "AnuchitO",
+		"balance": 100.0
+	}
+
+```
+*/
+
+// Wallet dababase in memory
+// var wallets = make(map[string]Wallet)
+// var wallets = []Wallet{}
 
 func main() {
 	r := gin.Default()
@@ -21,7 +47,7 @@ func main() {
 	r.GET("/hello/:id", func(c *gin.Context) {
 		c.Request.URL.Query().Get("name")
 		name := c.Query("name")
-		
+
 		id := c.Param("id")
 
 		c.JSON(200, gin.H{
