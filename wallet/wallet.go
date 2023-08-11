@@ -1,37 +1,31 @@
 package wallet
 
 import (
-	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type Wallet struct {
-	ID      string  `json:"id"`
-	Owner   string  `json:"owner"`
-	Balance float64 `json:"balance"`
+	ID      int
+	Owner   string
+	Balance float64
 }
 
-var wallets = make(map[string]Wallet)
+var wallets = make(map[int]Wallet)
 
-func CreateWalletHandler(c *gin.Context) {
-	log.Println("Create:")
-	var wt Wallet
-	if err := c.ShouldBindJSON(&wt); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+func convertID(id string) int {
+	// TODO: convert id to int
+	i, err := strconv.Atoi(id)
+	if err != nil {
+		return 0
 	}
-	wt.ID = uuid.New().String()
-	wallets[wt.ID] = wt
-	c.JSON(http.StatusCreated, wt)
+	return i
 }
 
 func GetWalletByIDHandler(c *gin.Context) {
-	id := c.Param("id")
+	id := convertID(c.Param("id"))
 	wt, ok := wallets[id]
 	if !ok {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -43,7 +37,7 @@ func GetWalletByIDHandler(c *gin.Context) {
 }
 
 func GetBalanceByIDHandler(c *gin.Context) {
-	id := c.Param("id")
+	id := convertID(c.Param("id"))
 	wt, ok := wallets[id]
 	if !ok {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -58,7 +52,7 @@ func GetBalanceByIDHandler(c *gin.Context) {
 }
 
 func DepositByIDHandler(c *gin.Context) {
-	id := c.Param("id")
+	id := convertID(c.Param("id"))
 	wt, ok := wallets[id]
 	if !ok {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -87,7 +81,7 @@ func DepositByIDHandler(c *gin.Context) {
 }
 
 func WithdrawByIDHandler(c *gin.Context) {
-	id := c.Param("id")
+	id := convertID(c.Param("id"))
 	wt, ok := wallets[id]
 	if !ok {
 		c.JSON(http.StatusNotFound, gin.H{
