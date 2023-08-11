@@ -2,7 +2,6 @@ package main
 
 import (
 	"apigo/wallet"
-	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +20,7 @@ payload:
 response:
 
 	{
-		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"id": "9",
 		"owner": "AnuchitO",
 		"balance": 100.0
 	}
@@ -31,12 +30,12 @@ response:
 
 GET /wallets/:id
 ```json
-GET /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f
+GET /wallets/9
 payload: no payload
 response:
 
 	{
-		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"id": "9",
 		"owner": "AnuchitO",
 		"balance": 100.0
 	}
@@ -45,12 +44,12 @@ response:
 
 GET /wallets/:id/balance
 ```json
-GET /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/balance
+GET /wallets/9/balance
 payload: no payload
 response:
 
 	{
-		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"id": "9",
 		"balance": 100.0
 	}
 
@@ -58,7 +57,7 @@ response:
 
 POST /wallets/:id/deposit
 ```json
-POST /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/deposit
+POST /wallets/9/deposit
 payload:
 	{
 		"amount": 100.0
@@ -67,7 +66,7 @@ payload:
 response:
 
 	{
-		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"id": "9",
 		"balance": 200.0
 	}
 
@@ -75,7 +74,7 @@ response:
 
 POST /wallets/:id/withdraw
 ```json
-POST /wallets/5f8451e0-3535-4726-b1be-4d152eb3051f/withdraw
+POST /wallets/9/withdraw
 payload:
 	{
 		"amount": 100.0
@@ -84,11 +83,21 @@ payload:
 response:
 
 	{
-		"id": "5f8451e0-3535-4726-b1be-4d152eb3051f",
+		"id": "9",
 		"balance": 100.0
 	}
 
 ```
+
+give me a curl to test all of these endpoints
+
+curl -X POST -H "Content-Type: application/json" -d '{"owner": "AnuchitO", "balance": 100.0}' http://localhost:8080/wallets
+curl -X GET http://localhost:8080/wallets/9
+curl -X GET http://localhost:8080/wallets/9/balance
+curl -X POST -H "Content-Type: application/json" -d '{"amount": 100.0}' http://localhost:8080/wallets/9/deposit
+curl -X POST -H "Content-Type: application/json" -d '{"amount": 100.0}' http://localhost:8080/wallets/9/withdraw
+
+
 */
 
 func main() {
@@ -96,36 +105,11 @@ func main() {
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
 
-// Logger handler
-func Logger() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		log.Println("handler:", c.Request.Method, c.Request.URL)
-		c.Next()
-		log.Println("after call next handler:", c.Request.Method, c.Request.URL)
-	}
-}
-
-// wrapper gin.HandlerFunc to use custom logger
-// take gin.HandlerFunc as input and return gin.HandlerFunc
-func Log(next gin.HandlerFunc) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		log.Println("Auth:")
-		// if not pass auth
-		// c.Abort()
-		// c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
-		// return
-
-		next(c)
-		log.Println("xxxx call next handler:", c.Request.Method, c.Request.URL)
-	}
-}
-
 // new Server return Gin
 func newServer() *gin.Engine {
 	r := gin.Default()
-	r.Use(Logger())
 
-	r.POST("/wallets", Log(wallet.CreateWalletHandler))
+	r.POST("/wallets", wallet.CreateWalletHandler)
 	r.GET("/wallets/:id", wallet.GetWalletByIDHandler)
 	r.GET("/wallets/:id/balance", wallet.GetBalanceByIDHandler)
 	r.POST("/wallets/:id/deposit", wallet.DepositByIDHandler)

@@ -1,15 +1,23 @@
 package wallet
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
+func InsertWallet(wt Wallet) (Wallet, error) {
+	conn := Conn()
+	var w Wallet
+	err := conn.QueryRow(insertWallet, wt.Owner, wt.Balance).Scan(&w.ID, &w.Owner, &w.Balance)
+	if err != nil {
+		return Wallet{}, err
+	}
+
+	return w, nil
+}
+
 func CreateWalletHandler(c *gin.Context) {
-	log.Println("Create:")
 	var wt Wallet
 	if err := c.ShouldBindJSON(&wt); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -17,7 +25,14 @@ func CreateWalletHandler(c *gin.Context) {
 		})
 		return
 	}
-	wt.ID = 0
-	wallets[wt.ID] = wt
+
+	wt, err := InsertWallet(wt)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	c.JSON(http.StatusCreated, wt)
 }
