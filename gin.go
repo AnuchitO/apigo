@@ -2,10 +2,13 @@ package main
 
 import (
 	"apigo/wallet"
+	"context"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -105,7 +108,12 @@ curl -X POST -H "Content-Type: application/json" -d '{"amount": 100.0}' http://l
 */
 
 func main() {
-	r := newServer()
+	router := newServer()
+
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: router,
+	}
 
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
@@ -115,12 +123,20 @@ func main() {
 		log.Println("waiting..")
 		<-shutdown
 		// Close database connections, channels, etc.
+		log.Println("Shutting down server...")
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
 
+		if err := srv.Shutdown(ctx); err != nil {
+			log.Fatalf("Server shutdown error: %v", err)
+		}
 		log.Println("Shutting down gracefully...")
 		os.Exit(0)
 	}()
 
-	r.Run() // listen and serve on 0.0.0.0:8080
+	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatalf("Error: %v", err)
+	}
 }
 
 // new Server return Gin
