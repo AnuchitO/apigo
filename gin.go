@@ -2,6 +2,10 @@ package main
 
 import (
 	"apigo/wallet"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/gin-gonic/gin"
 )
@@ -102,6 +106,20 @@ curl -X POST -H "Content-Type: application/json" -d '{"amount": 100.0}' http://l
 
 func main() {
 	r := newServer()
+
+	shutdown := make(chan os.Signal, 1)
+	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM)
+
+	// Start listening for shutdown signals
+	go func() {
+		log.Println("waiting..")
+		<-shutdown
+		// Close database connections, channels, etc.
+
+		log.Println("Shutting down gracefully...")
+		os.Exit(0)
+	}()
+
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
 
